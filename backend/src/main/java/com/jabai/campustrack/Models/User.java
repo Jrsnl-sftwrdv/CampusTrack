@@ -32,6 +32,13 @@ public class User {
   @Column(name = "user_role", nullable = false)
   private UserRole userRole;
 
+  // Worker dispatch columns (only meaningful for WORKER accounts)
+  @Column(name = "available", nullable = false)
+  private boolean available = false; // on duty or not
+
+  @Column(name = "last_assigned_at")
+  private LocalDateTime lastAssignedAt; // tie-breaker when distributing work
+
   protected User() { }
 
   public User(String name, String email, String password, UserRole userRole) {
@@ -48,10 +55,14 @@ public class User {
   public String getEmail() { return email; }
   public String getHashedPassword() { return password; }
   public UserRole getUserRole() { return userRole; }
+  public boolean getAvailable() { return available; }
+  public LocalDateTime getLastAssignedAt() { return lastAssignedAt; }
 
   //Setters
   public void setName(String value) { name = value; }
   public void setEmail(String value) { email = value; }
   public void setHashedPassword(String value) { password = value; }
   public void setUserRole(UserRole value) { userRole = value; }
+  public void setAvailable(boolean value) { available = value; }
+  public void setLastAssignedAt(LocalDateTime value) { lastAssignedAt = value; }
 }
