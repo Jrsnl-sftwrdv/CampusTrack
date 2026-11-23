@@ -244,6 +244,16 @@ public class IncidentService {
     }
 
     // ===== Service Utils =====
+
+    // used by @PreAuthorize in the controller - CHRIS CHAN
+    @Transactional(readOnly = true)
+    public boolean isOwner(Long incidentId, String userId) {
+        return incidentRepository
+                .findById(incidentId)
+                .map(incident -> incident.getReportedBy().getId().toString().equals(userId))
+                .orElse(false);
+    }
+
     private IncidentResponseDto buildIncidentResponseDto(Incident incident) {
         Room room = incident.getRoom();
         User reportedBy = incident.getReportedBy();
@@ -260,13 +270,7 @@ public class IncidentService {
                 room.getCriticality()
         );
 
-        UserProfileResponseDto userProfileResponseDto = new UserProfileResponseDto(
-                reportedBy.getCreatedAt(),
-                reportedBy.getId(),
-                reportedBy.getName(),
-                reportedBy.getEmail(),
-                reportedBy.getUserRole()
-        );
+        UserProfileResponseDto userProfileResponseDto = UserProfileResponseDto.from(reportedBy);
 
         IncidentResponseDto incidentResponseDto = new IncidentResponseDto(
                 incident.getId(),
@@ -301,13 +305,7 @@ public class IncidentService {
                     asset.getCreatedAt()
             ));
         if (assignedTo != null)
-            incidentResponseDto.setAssigned(new UserProfileResponseDto(
-                    assignedTo.getCreatedAt(),
-                    assignedTo.getId(),
-                    assignedTo.getName(),
-                    assignedTo.getEmail(),
-                    assignedTo.getUserRole()
-            ));
+            incidentResponseDto.setAssigned(UserProfileResponseDto.from(assignedTo));
 
         return incidentResponseDto;
     }

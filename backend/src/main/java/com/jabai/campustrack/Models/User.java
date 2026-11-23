@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import com.jabai.campustrack.Models.Enums.UserRole;
+
 import org.hibernate.annotations.Generated;
 
 @Entity
@@ -19,9 +20,6 @@ public class User {
   private LocalDateTime createdAt;
 
   // Core columns
-  @Column(name = "name", nullable = false, length = 100)
-  private String name;
-
   @Column(name = "email", nullable = false, unique = true, length = 100)
   private String email;
 
@@ -34,15 +32,18 @@ public class User {
 
   // Worker dispatch columns (only meaningful for WORKER accounts)
   @Column(name = "available", nullable = false)
-  private boolean available = false; // on duty or not
+  private boolean available = false;
 
   @Column(name = "last_assigned_at")
-  private LocalDateTime lastAssignedAt; // tie-breaker when distributing work
+  private LocalDateTime lastAssignedAt;
+
+  // One-to-one profile
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+  private UserProfile profile;
 
   protected User() { }
 
-  public User(String name, String email, String password, UserRole userRole) {
-    this.name = name;
+  public User(String email, String password, UserRole userRole) {
     this.email = email;
     this.password = password;
     this.userRole = userRole;
@@ -51,18 +52,23 @@ public class User {
   // Getters
   public Long getId() { return id; }
   public LocalDateTime getCreatedAt() { return createdAt; }
-  public String getName() { return name; }
+
   public String getEmail() { return email; }
   public String getHashedPassword() { return password; }
   public UserRole getUserRole() { return userRole; }
+
   public boolean getAvailable() { return available; }
   public LocalDateTime getLastAssignedAt() { return lastAssignedAt; }
 
-  //Setters
-  public void setName(String value) { name = value; }
+  public UserProfile getProfile() { return profile; }
+
+  // Setters
   public void setEmail(String value) { email = value; }
   public void setHashedPassword(String value) { password = value; }
   public void setUserRole(UserRole value) { userRole = value; }
+
   public void setAvailable(boolean value) { available = value; }
   public void setLastAssignedAt(LocalDateTime value) { lastAssignedAt = value; }
+
+  public void setProfile(UserProfile value) { this.profile = value; }
 }

@@ -1,15 +1,45 @@
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
-export default function page() {
+export default function SamplePage() {
   return (
-    <main className="py-12">
-      <section className="max-w-7xl mx-auto space-y-12">
+    <main className="py-12 space-y-16">
 
-        <div className="space-y-6">
-          <h1 className="text-2xl md:text-4xl font-heading font-semibold uppercase tracking-wider">Root Homepage</h1>
-          <p>Hello world ;D</p>
-        </div>
-
+      <section className="max-w-7xl mx-auto px-4">
+        <h1 className="text-2xl">Landing Page</h1>
       </section>
+
+      <section className="max-w-7xl mx-auto px-4">
+        <Card className="max-w-xl mx-auto text-center">
+          <CardHeader>
+            <CardTitle>This Website Is Under Development</CardTitle>
+            <CardDescription>
+              Something new is on the way. Check back soon.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>We are building and polishing everything. Thanks for your patience.</p>
+          </CardContent>
+          <CardFooter>
+            <p>
+              For more details, you can contact the lead developer at{" "}
+              <a
+                href="mailto:charleshenrytinoy8@gmail.com"
+                className="underline underline-offset-4"
+              >
+                charleshenrytinoy8@gmail.com
+              </a>
+            </p>
+          </CardFooter>
+        </Card>
+      </section>
+
     </main>
-  )
+  );
 }
